@@ -1,3 +1,4 @@
+#include <math.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -8,38 +9,24 @@ union IntAndFloat {
 };
 
 int main() {
-  char a[] = "Hello, World\n";
-  char** num = malloc(sizeof(char*) * 4);
-  char* string = malloc(sizeof(char) * 64 * 4);
+  char a[] = "Hello,World\n";
+  union IntAndFloat target[4];
+  int sum[4];  // floatに変換前の値が入る
   for (int i = 0; i < 4; i++) {
-    num[i] = (string + 64 * i);
+    sum[i] = 0;
   }
-  
   for (int i = 0; i < strlen(a); i++) {
-    for (int j = 0; j < 8; j++) {
-      if (a[i] & 1 << 7 - j) {
-        printf("%d", 1);
-      } else {
-        printf("%d", 0);
-      }
-    }
-    printf("\n");
+    int n = (int)i / 4;
+    printf("%d\n", a[i] * (int)pow(2, 8 * (i % 4)));
+    sum[n] += a[i] * (int)pow(2, 8 * (i % 4));
+    printf("sum[%d] = %d\n", i / 4, sum[n]);
   }
-  int i = 0;
-  union IntAndFloat target;
-  target.ival = 0b00000000000000000000000000001010;
-
-  printf("target = %g\n", target.fval);
-  for (i = 0; i < 32; i++) {
-    if ((target.ival & 0x80000000) == 0x80000000) {
-      printf("1");
-    } else {
-      printf("0");
-    }
-    target.ival = target.ival << 1;
+  for (int i = 0; i < 4; i++) {
+    target[i].ival = sum[i];
+    printf("%d\n", target[i].ival);
   }
-  printf("\n");
-  free(string);
-  free(num);
+  for (int i = 0; i < 4; i++) {
+    printf("%.200f\n", target[i].fval);
+  }
   return 0;
 }
