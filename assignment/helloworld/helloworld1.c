@@ -1,5 +1,7 @@
 #include <stdio.h>
 
+//実行環境Win10, CPU Intel Corei5
+
 int main(void) {
   float f[4];
 

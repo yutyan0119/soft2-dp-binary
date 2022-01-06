@@ -3,6 +3,8 @@
 #include <stdlib.h>
 #include <string.h>
 
+//実行環境Win10, CPU Intel Corei5
+
 union IntAndFloat {
   int ival;
   float fval;
