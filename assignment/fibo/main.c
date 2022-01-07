@@ -19,15 +19,8 @@ int main(int argc, char** argv) {
   assert(n <= 90);
   long base_matrix[2][2] = {{1, 1}, {1, 0}};
   long result[2][2] = {{1, 0}, {0, 1}};
-  pow_matrix(base_matrix, n-1, result);
-  for (int i = 0; i < 2; i++) {
-    printf("[");
-    for (int j = 0; j < 2; j++) {
-      printf("%ld ", result[i][j]);
-    }
-    printf("]\n");
-  }
-  printf("fibo[%d] = %ld\n",n,result[0][0]);
+  pow_matrix(base_matrix, n - 1, result);
+  printf("fibo[%d] = %ld\n", n, result[0][0]);
 }
 
 void mul_matrix(long a[][2], long b[][2], long result[][2]) {
@@ -49,16 +42,28 @@ void mul_matrix(long a[][2], long b[][2], long result[][2]) {
 }
 
 void pow_matrix(long a[][2], long n, long result[][2]) {
-  while (n > 0) {
-    if (n & 1) {
-      mul_matrix(result, a, result);
-    }
-    mul_matrix(a, a, a);
+  if (n == 1) {
     for (int i = 0; i < 2; i++) {
       for (int j = 0; j < 2; j++) {
+        result[i][j] = a[i][j];
       }
-    }
-    n >>= 1;
+    };
+    return;
+  }
+  if (n == 2) {
+    mul_matrix(a, a, result);
+    return;
+  }
+  if (n % 2 == 0) {
+    long tmp[2][2];
+    pow_matrix(a, n / 2, tmp);
+    pow_matrix(tmp, 2, result);
+  }
+  if (n % 2 == 1) {
+    long tmp[2][2];
+    pow_matrix(a, n / 2, tmp);
+    pow_matrix(tmp, 2, result);
+    mul_matrix(result, a, result);
   }
   return;
 }
