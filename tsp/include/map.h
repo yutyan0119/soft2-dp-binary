@@ -2,8 +2,7 @@
 // 描画用
 #include "city.h"
 
-typedef struct
-{
+typedef struct {
   int width;
   int height;
   char **dot;
