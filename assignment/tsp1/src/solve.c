@@ -6,24 +6,48 @@
 #include "city.h"
 #include "map.h"
 
-double solve(const City *city, int n, int *route, int *visited) {
-  // 以下はとりあえずダミー。ここに探索プログラムを実装する
-  // 現状は町の番号順のルートを回っているだけ
-  // 実際は再帰的に探索して、組み合わせが膨大になる。
-  route[0] = 0;  // 循環した結果を避けるため、常に0番目からスタート
-  visited[0] = 1;
+double solve(const City *city, int n, int *route, int *ans_route) {
+  int is_change = 0;
+  double ans = calc_score(city, n, route);  //初期スコア
   for (int i = 0; i < n; i++) {
-    route[i] = i;
-    visited[i] = 1;  // 訪問済みかチェック
+    for (int j = i + 1; j < n; j++) {
+      swap(i, j,route);  // routeのiとjを入れ替える。
+      double sum = calc_score(city, n, route);
+      if (sum < ans) {
+        sum = ans;
+        is_change = 1;
+        route_copy(route, ans_route, n);  // ansにコピー
+      }
+    }
   }
+  if (is_change) {
+    // ans_routeをrouteにコピーして解が更新されなくなるまでやる。
+    route_copy(ans_route, route, n);
+    ans = solve(city, n, route, ans_route);
+  }
+  return ans;
+}
 
-  // トータルの巡回距離を計算する
-  // 実際には再帰の末尾で計算することになる
-  double sum_d = 0;
+double calc_score(const City *city, int n, int *route) {
+  double sum = 0;
   for (int i = 0; i < n; i++) {
     const int c0 = route[i];
     const int c1 = route[(i + 1) % n];  // nは0に戻る
-    sum_d += distance(city[c0], city[c1]);
+    sum += distance(city[c0], city[c1]);
   }
-  return sum_d;
+  return sum;
+}
+
+void swap(int i, int j, int *route) {
+  int c1 = route[i];
+  route[i] = route[j];
+  route[j] = c1;
+  return;
+}
+
+void route_copy(int *route, int *copied_route, int n) {
+  for (int i = 0; i < n; i++) {
+    copied_route[i] = route[i];
+  }
+  return;
 }
