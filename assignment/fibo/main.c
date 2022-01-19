@@ -19,8 +19,13 @@ int main(int argc, char** argv) {
   assert(n <= 90);
   long base_matrix[2][2] = {{1, 1}, {1, 0}};
   long result[2][2] = {{1, 0}, {0, 1}};
+  if(n==1||n==0){
+    printf("fibo[%d] = %d\n", n, n);
+    return EXIT_SUCCESS;
+  }
   pow_matrix(base_matrix, n - 1, result);
   printf("fibo[%d] = %ld\n", n, result[0][0]);
+  printf("%ld %ld\n%ld %ld\n",result[0][0],result[0][1],result[1][0],result[1][1]);
 }
 
 void mul_matrix(long a[][2], long b[][2], long result[][2]) {
