@@ -16,6 +16,7 @@ int main(int argc, char *argv[]) {
     for (int j = i; j < citynum; j++) {
       dist[i][j] = distance(cities[i], cities[j]);
       dist[j][i] = dist[i][j];
+      printf("dist[%d][%d] = %f\n",i,j,dist[i][j]);
     }
   }
 
@@ -31,10 +32,13 @@ int main(int argc, char *argv[]) {
     }
   }
   double ans = 1000000;
+  int lastcity;
   for (int i = 0; i < citynum; i++) {
     if (ans > solve((1 << citynum) - 1, i, dp, citynum, dist)) {
       ans = solve((1 << citynum) - 1, i, dp, citynum, dist);
+      lastcity = i;
     }
   }
-  printf("%f\n", ans);
+  printf("%d\n",lastcity);
+  printf("%f\n", ans+dist[0][lastcity]);
 }
